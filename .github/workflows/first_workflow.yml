@@ -9,9 +9,9 @@ jobs:
         - name: install dependencies
           run: npm ci
         - name: lint_code
-          run: npm lint
+          run: npm run lint
         - name: test_code
-          run: npm test
+          run: npm run test
   Deploy:
       runs-on: ubuntu-latest
       steps:
