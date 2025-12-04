@@ -1,33 +1,23 @@
-name: Deploy website
-on:
-  push:
-    branches:
-      - main
+name: artifacts
+on: 
+   push:
+      branches:
+        - artifacts
+
 jobs:
-  test:
+  build_artifacts:
     runs-on: ubuntu-latest
     steps:
-      - name: Get code
-        uses: actions/checkout@v3
-      - name: Install dependencies
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: install dependencies
         run: npm ci
-      - name: Lint code
-        run: npm run lint
-      - name: Test code
+      - name: tests
         run: npm run test
-  build:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get code
-        uses: actions/checkout@v3
-      - name: Install dependencies
-        run: npm ci
-      - name: Build website
+      - name: build
         run: npm run build
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy
-        run: echo "Deploying..."
+      - name: upload_artifacts
+        id: artifacts
+        uses: actions/upload_artifacts@v4
+        with:
+          path: dist
