@@ -1,0 +1,24 @@
+#testing aws connection with my role
+name: Test AWS OIDC Connection
+on:
+  workflow_dispatch:   # run manually from GitHub Actions tab
+
+jobs:
+  test-aws:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write   # required for OIDC
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::207567756200:role/github_actions_access_to_aws_services   # <-- your role ARN
+          aws-region: us-east-1
+
+      - name: Verify AWS Identity
+        run: aws sts get-caller-identity
