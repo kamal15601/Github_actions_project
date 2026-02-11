@@ -24,14 +24,13 @@ jobs:
         run: aws s3 ls
       - name: Build Docker image
         run: docker build -t myapp .
-
       - name: Tag Docker image
-        run: docker tag myapp 207567756200.dkr.ecr.us-east-1.amazonaws.com/my-app:latest
+        run: docker tag myapp 207567756200.dkr.ecr.us-east-1.amazonaws.com/myapp:latest
       - name: list images
         run: docker images
       - name: Push Docker image to ECR
         run: |
           aws ecr get-login-password --region us-east-1 | \
             docker login --username AWS --password-stdin  207567756200.dkr.ecr.us-east-1.amazonaws.com
-          docker push  207567756200.dkr.ecr.us-east-1.amazonaws.com/my-app:latest
+          docker push  207567756200.dkr.ecr.us-east-1.amazonaws.com/myapp:latest
 
