@@ -1,35 +1,13 @@
+FROM eclipse-temurin:17-jdk-alpine
+    
+EXPOSE 8080
 
-FROM ubuntu:22.04
+RUN ls 
 
-ARG DEBIAN_FRONTEND=noninteractive
-ARG USERNAME=ansible
-ARG UID=1000
-ARG GID=1000
+ENV APP_HOME /usr/src/app
 
-# Install SSH server, sudo, python3; create user/group; configure sshd
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends openssh-server sudo python3 ca-certificates && \
-    rm -rf /var/lib/apt/lists/* && \
-    groupadd -g ${GID} ${USERNAME} && \
-    useradd -m -u ${UID} -g ${GID} -s /bin/bash ${USERNAME} && \
-    echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USERNAME} && \
-    chmod 0440 /etc/sudoers.d/${USERNAME} && \
-    mkdir -p /var/run/sshd && \
-    sed -ri 's/^#?PasswordAuthentication .*/PasswordAuthentication no/g' /etc/ssh/sshd_config && \
-    sed -ri 's/^#?PermitRootLogin .*/PermitRootLogin no/g' /etc/ssh/sshd_config && \
-    sed -ri 's/^#?PubkeyAuthentication .*/PubkeyAuthentication yes/g' /etc/ssh/sshd_config
+COPY app/*.jar $APP_HOME/app.jar
 
-# Copy your SSH public key (must be in the build context)
-COPY docker_key.pub /tmp/docker_key.pub
+WORKDIR $APP_HOME
 
-# Place key into authorized_keys with correct ownership and permissions
-RUN install -d -m 700 -o ${USERNAME} -g ${GID} /home/${USERNAME}/.ssh && \
-    cat /tmp/docker_key.pub >> /home/${USERNAME}/.ssh/authorized_keys && \
-    chown -R ${USERNAME}:${GID} /home/${USERNAME}/.ssh && \
-    chmod 600 /home/${USERNAME}/.ssh/authorized_keys && \
-    rm -f /tmp/docker_key.pub
-
-EXPOSE 22
-
-# Start sshd in the foreground (no systemd required)
-CMD ["/usr/sbin/sshd", "-D", "-e"]
+CMD ["java", "-jar", "app.jar"]
