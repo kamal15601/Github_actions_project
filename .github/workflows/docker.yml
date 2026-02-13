@@ -1,11 +1,11 @@
 #testing aws connection with my role
-name: Test AWS OIDC Connection
+name: docker build and push
 on:
   workflow_call:
-    inputs:
-      image_tag:
-        required: true
-        type: string     # run manually from GitHub Actions tab
+    inputs: 
+      image_tag: 
+        required: true 
+        type: string   # run manually from GitHub Actions tab
 
 jobs:
   test-aws:
