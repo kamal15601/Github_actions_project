@@ -89,6 +89,7 @@ jobs:
       with:
         name: app-jar
         path: app # this will download JAR to ./app folder
+    - uses: actions/checkout@v4
     - name: docker build
       uses: ./.github/workflows/docker.yml
       with:
