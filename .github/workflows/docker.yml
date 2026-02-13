@@ -1,7 +1,11 @@
 #testing aws connection with my role
 name: Test AWS OIDC Connection
 on:
-  workflow_dispatch:   # run manually from GitHub Actions tab
+  workflow_call:
+    inputs:
+      image_tag:
+        required: true
+        type: string     # run manually from GitHub Actions tab
 
 jobs:
   test-aws:
@@ -17,15 +21,19 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::207567756200:role/github_actions_access_to_aws_services   # <-- your role ARN
           aws-region: us-east-1
+      - name: Set up QEMU 
+        uses: docker/setup-qemu-action@v3 
+      - name: Set up Docker Buildx 
+        uses: docker/setup-buildx-action@v3
       - name: Build Docker image
-        run: docker build -t myapp .
+        run: docker build -t bank_app .
       - name: Tag Docker image
-        run: docker tag myapp 207567756200.dkr.ecr.us-east-1.amazonaws.com/myapp:latest
+        run: docker tag myapp 207567756200.dkr.ecr.us-east-1.amazonaws.com/bank_app:latest
       - name: list images
         run: docker images
       - name: Push Docker image to ECR
         run: |
           aws ecr get-login-password --region us-east-1 | \
             docker login --username AWS --password-stdin  207567756200.dkr.ecr.us-east-1.amazonaws.com
-          docker push  207567756200.dkr.ecr.us-east-1.amazonaws.com/myapp:latest
+          docker push  207567756200.dkr.ecr.us-east-1.amazonaws.com/bank_app:latest
 
