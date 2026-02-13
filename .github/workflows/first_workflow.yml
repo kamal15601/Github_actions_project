@@ -8,17 +8,7 @@ jobs:
       runs-on: ubuntu-latest
       steps:
          - uses: actions/checkout@v4
-         - name: echo
-           run: |
-             echo "{{ secrets.SONAR_PROJECT_KEY }}"
-             echo "{{ secrets.SONAR_ORGANIZATION }}"
-         - name: SonarCloud Scan 
-           uses: SonarSource/sonarcloud-github-action@v2
-           env: 
-             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-           with: 
-             args: >
-               -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} 
-               -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} 
+         - name: workflow_trigger
+           uses: ./.github/workflows/docker.yml
 
         
