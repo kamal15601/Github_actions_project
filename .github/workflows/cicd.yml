@@ -1,4 +1,11 @@
-- name: github_actions_pipeline
-  on:
-    workflowdispatch:
+name: github_actions_pipeline
+on:
+  push:
+    branches: [ "main" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+  steps:
+   - name: checkout_code
+     uses: actions/checkout@v4
     
