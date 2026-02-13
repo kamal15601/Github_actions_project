@@ -6,6 +6,9 @@ on:
         description: "Which job to run" 
         required: true 
         default: build
+permissions:
+      id-token: write   # required for OIDC
+      contents: read
 jobs:
   build:
     runs-on: ubuntu-latest
