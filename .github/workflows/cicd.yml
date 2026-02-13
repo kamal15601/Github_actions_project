@@ -1,0 +1,4 @@
+- name: github_actions_pipeline
+  on:
+    workflowdispatch:
+    
