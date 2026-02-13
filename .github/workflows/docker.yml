@@ -19,7 +19,10 @@ jobs:
           name: app-jar 
           path: app
       - name: Show files
-        run: ls -la app
+        run: |
+          pwd
+          ls -la app
+          
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
