@@ -89,10 +89,11 @@ jobs:
       with:
         name: app-jar
         path: app # this will download JAR to ./app folder
-    - name: docker build
-      uses: ./.github/workflows/docker.yml
-      with:
-        image_tag: latest
+  Trigger_docker_build_workflow:
+    uses: ./.github/workflows/docker.yml
+    needs: build_docker_image_and_push_toECR
+    with:
+      image_tag: latest
 
 
 
