@@ -1,7 +1,11 @@
 name: github_actions_pipeline
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch: 
+    inputs: 
+      job_name:
+        description: "Which job to run" 
+        required: true 
+        default: build
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -47,7 +51,7 @@ jobs:
           distribution: "temurin"
           cache: maven
       - name: Unit test cases
-        run: maven test
+        run: mvn test
       
   Build_project_and_sonar_scan:
     runs-on: ubuntu-latest
