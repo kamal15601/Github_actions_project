@@ -11,14 +11,9 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
-      - name: Download JAR artifacts
-        uses: actions/download-artifact@v4
+      - name: trigger
+        uses: ./.github/workflows/docker.yml
         with:
-          name: app-jar
-          path: app
+           image_tag: latest
 
-  docker:
-    uses: ./.github/workflows/docker.yml   # 👈 call reusable workflow
-    needs: prepare
-    with:
-      image_tag: latest
+   
