@@ -20,14 +20,16 @@ jobs:
           path: app
       - name: Show files
         run: |
-          pwd
-          echo "Root listing:"
-          ls -la
-          echo "app listing:"
-          ls -la app || true
-          echo "Dockerfile:"
-          ls -la Dockerfile || true
-          
+             echo "PWD: $(pwd)"
+              echo "Root listing:"
+              ls -la
+              echo "app listing:"
+              ls -la app || true
+              echo "Dockerfile exists:"
+              ls -la Dockerfile || true
+              echo ".dockerignore:"
+              cat .dockerignore || true
+                      
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
