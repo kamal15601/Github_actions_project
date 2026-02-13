@@ -37,10 +37,6 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::207567756200:role/github_actions_access_to_aws_services   # <-- your role ARN
           aws-region: us-east-1
-      - name: Set up QEMU 
-        uses: docker/setup-qemu-action@v3 
-      - name: Set up Docker Buildx 
-        uses: docker/setup-buildx-action@v3
       - uses: actions/checkout@v4
       - name: Build Docker image
         run: docker build -t bank_app .
