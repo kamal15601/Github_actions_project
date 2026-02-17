@@ -6,6 +6,9 @@ on:
       image_tag: 
         required: true 
         type: string   # run manually from GitHub Actions tab
+    secrets: 
+      DOCKERHUB_TOKEN: 
+        required: true
 
 jobs:
   test-aws:
