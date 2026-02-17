@@ -18,35 +18,25 @@ jobs:
         with: 
           name: app-jar 
           path: app
-      - name: Show files
-        run: |
-             echo "PWD: $(pwd)"
-              echo "Root listing:"
-              ls -la
-              echo "app listing:"
-              ls -la app || true
-              echo "Dockerfile exists:"
-              ls -la Dockerfile || true
-              echo ".dockerignore:"
-              cat .dockerignore || true
-              echo "Run docker build locally style (plain progress):"
-              docker build --progress=plain -f ./Dockerfile -t debug-bankapp .
-                      
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          role-to-assume: arn:aws:iam::207567756200:role/github_actions_access_to_aws_services   # <-- your role ARN
-          aws-region: us-east-1
-      - uses: actions/checkout@v4
-      - name: Build Docker image
-        run: docker build -t bank_app .
-      - name: Tag Docker image
-        run: docker tag myapp 207567756200.dkr.ecr.us-east-1.amazonaws.com/bank_app:latest
-      - name: list images
-        run: docker images
-      - name: Push Docker image to ECR
-        run: |
-          aws ecr get-login-password --region us-east-1 | \
-            docker login --username AWS --password-stdin  207567756200.dkr.ecr.us-east-1.amazonaws.com
-          docker push  207567756200.dkr.ecr.us-east-1.amazonaws.com/bank_app:latest
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bank_app:latest
+
 
